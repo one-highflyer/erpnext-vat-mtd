@@ -246,6 +246,12 @@ def submit_vat_return(name, is_finalised):
 
 	doc = frappe.get_doc("UK VAT Return", name)
 
+	# Only allow HMRC submission for submitted returns
+	if doc.docstatus == 2:
+		frappe.throw("Cancelled VAT Returns cannot be submitted to HMRC.")
+	if doc.docstatus != 1:
+		frappe.throw("Submit the VAT Return in ERPNext before sending it to HMRC.")
+
 	# Match dates on the form to an open obgligation
 	obligations = vat_api.get_open_obligations(doc.company)
 	selected_obligation = None
@@ -294,6 +300,5 @@ def submit_vat_return(name, is_finalised):
 		"is_finalised": is_finalised
 	}
 
-	if doc.docstatus == 1:
-		# Update submitted docs without triggering submit validations
-		doc.db_set(response_fields, commit=False)
+	# Update submitted docs without triggering submit validations
+	doc.db_set(response_fields, commit=False)

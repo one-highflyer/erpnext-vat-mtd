@@ -160,7 +160,7 @@
   {
    "allow_on_submit": 1,
    "default": "0",
-   "depends_on": "eval:doc.docstatus == 1",
+   "depends_on": "eval:(doc.docstatus == 1)",
    "fieldname": "is_finalised",
    "fieldtype": "Check",
    "label": "I agree with the above HMRC declaration"
@@ -247,7 +247,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-24 19:20:38.508282",
+ "modified": "2025-11-24 19:49:40.142725",
  "modified_by": "Administrator",
  "module": "UK VAT Return",
  "name": "UK VAT Return",
