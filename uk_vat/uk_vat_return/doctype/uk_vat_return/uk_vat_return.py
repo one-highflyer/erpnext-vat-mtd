@@ -246,11 +246,13 @@ def submit_vat_return(name, is_finalised):
 
 	doc = frappe.get_doc("UK VAT Return", name)
 
-	# Only allow HMRC submission for submitted returns
-	if doc.docstatus == 2:
-		frappe.throw("Cancelled VAT Returns cannot be submitted to HMRC.")
+	# Only allow HMRC submission for submitted documents
 	if doc.docstatus != 1:
 		frappe.throw("Submit the VAT Return in ERPNext before sending it to HMRC.")
+		
+	# Prevent resubmission of already submitted returns
+	if doc.hmrc_processing_date or doc.hmrc_receipt_id:
+		frappe.throw("This VAT Return has already been submitted to HMRC.")
 
 	# Match dates on the form to an open obgligation
 	obligations = vat_api.get_open_obligations(doc.company)
