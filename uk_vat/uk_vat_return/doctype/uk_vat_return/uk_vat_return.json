@@ -160,13 +160,13 @@
   {
    "allow_on_submit": 1,
    "default": "0",
-   "depends_on": "eval:(doc.docstatus == 1)",
+   "depends_on": "eval:(doc.docstatus == 1 && !doc.hmrc_processing_date)",
    "fieldname": "is_finalised",
    "fieldtype": "Check",
    "label": "I agree with the above HMRC declaration"
   },
   {
-   "depends_on": "eval:(doc.is_finalised && doc.docstatus == 1)",
+   "depends_on": "eval:(doc.is_finalised && doc.docstatus == 1 && !doc.hmrc_processing_date)",
    "fieldname": "submit_to_hmrc",
    "fieldtype": "Button",
    "label": "Submit VAT return to HMRC"
