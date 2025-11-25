@@ -152,7 +152,7 @@
    "label": "Fetch open returns from HMRC"
   },
   {
-   "depends_on": "eval:(!doc.__islocal && doc.docstatus == 1 && !doc.hmrc_receipt_id)",
+   "depends_on": "eval:(!doc.__islocal && doc.docstatus == 1)",
    "fieldname": "section_submission",
    "fieldtype": "Section Break",
    "label": "VAT Return Submission"
@@ -246,7 +246,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-25 20:45:02.035225",
+ "modified": "2025-11-25 21:16:12.745364",
  "modified_by": "Administrator",
  "module": "UK VAT Return",
  "name": "UK VAT Return",
@@ -282,7 +282,6 @@
    "write": 1
   }
  ],
- "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
