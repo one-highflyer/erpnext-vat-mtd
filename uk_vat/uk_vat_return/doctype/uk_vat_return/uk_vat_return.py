@@ -303,4 +303,4 @@ def submit_vat_return(name, is_finalised):
 	}
 
 	# Update submitted docs without triggering submit validations
-	doc.db_set(response_fields, commit=False)
+	doc.db_set(response_fields, commit=True)
