@@ -21,6 +21,10 @@ frappe.ui.form.on('UK VAT Return', {
 
 		if(!frm.is_new()) {
 
+			if (frm.dashboard) {
+				frm.dashboard.clear_comment();
+			}
+
 			if (frm.doc.docstatus === 0) {
 				frm.set_intro(__("Please submit this document first to proceed to the HMRC VAT Returns submission"), "orange");
 			}
