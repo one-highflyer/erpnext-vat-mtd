@@ -25,7 +25,7 @@ def test_api(name):
 	client_id = frappe.db.get_single_value("HMRC API Settings", "client_id")
 	client_secret = get_decrypted_password(
 		"HMRC API Settings", "HMRC API Settings", "client_secret", raise_exception=False
-	) or frappe.db.get_single_value("HMRC API Settings", "client_secret")
+	)
 	api_base = frappe.db.get_single_value("HMRC API Settings", "api_base")
 
 	# Attempt to get a backend token with the supplied client secret. If this

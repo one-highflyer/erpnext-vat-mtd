@@ -23,7 +23,7 @@ def authorize_access(name):
 	client_id = frappe.db.get_single_value("HMRC API Settings", "client_id")
 	client_secret = get_decrypted_password(
 		"HMRC API Settings", "HMRC API Settings", "client_secret", raise_exception=False
-	) or frappe.db.get_single_value("HMRC API Settings", "client_secret")
+	)
 	auth_base = frappe.db.get_single_value("HMRC API Settings", "auth_base")
 
 	# Generate authorisation request
@@ -66,7 +66,7 @@ def hmrc_callback(code=None, state=None,
 	client_id = frappe.db.get_single_value("HMRC API Settings", "client_id")
 	client_secret = get_decrypted_password(
 		"HMRC API Settings", "HMRC API Settings", "client_secret", raise_exception=False
-	) or frappe.db.get_single_value("HMRC API Settings", "client_secret")
+	)
 	api_base = frappe.db.get_single_value("HMRC API Settings", "api_base")
 
 	scope = ["read:vat", "write:vat"] # TODO: hard coded VAT request
@@ -105,7 +105,7 @@ def get_session(company):
 	client_id = frappe.db.get_single_value("HMRC API Settings", "client_id")
 	client_secret = get_decrypted_password(
 		"HMRC API Settings", "HMRC API Settings", "client_secret", raise_exception=False
-	) or frappe.db.get_single_value("HMRC API Settings", "client_secret")
+	)
 	api_base = frappe.db.get_single_value("HMRC API Settings", "api_base")
 	auth_base = frappe.db.get_single_value("HMRC API Settings", "auth_base")
 	extra = {
