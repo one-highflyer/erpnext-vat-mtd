@@ -246,6 +246,14 @@ def submit_vat_return(name, is_finalised):
 
 	doc = frappe.get_doc("UK VAT Return", name)
 
+	# Only allow HMRC submission for submitted documents
+	if doc.docstatus != 1:
+		frappe.throw("Submit the VAT Return in ERPNext before sending it to HMRC.")
+		
+	# Prevent resubmission of already submitted returns
+	if doc.hmrc_processing_date or doc.hmrc_receipt_id:
+		frappe.throw("This VAT Return has already been submitted to HMRC.")
+
 	# Match dates on the form to an open obgligation
 	obligations = vat_api.get_open_obligations(doc.company)
 	selected_obligation = None
@@ -281,15 +289,18 @@ def submit_vat_return(name, is_finalised):
 		title=response["message"])
 
 	# Save response
-	doc.hmrc_correlation_id = headers["X-CorrelationId"]
-	doc.hmrc_receipt_id = headers["Receipt-ID"]
-	doc.hmrc_receipt_timestamp = headers["Receipt-Timestamp"]
-	doc.hmrc_period_key = selected_obligation["periodKey"]
-	doc.hmrc_processing_date = response.get("processingDate")
-	doc.hmrc_form_bundle_number = response.get("formBundleNumber")
-	doc.hmrc_payment_indicator = response.get("paymentIndicator")
-	doc.hmrc_charge_reference_number = response.get("chargeRefNumber")
-	doc.hmrc_vrn = vat_api.get_vrn(doc.company)
-	doc.is_finalised = is_finalised
-	doc.docstatus = 1
-	doc.save()
+	response_fields = {
+		"hmrc_correlation_id": headers["X-CorrelationId"],
+		"hmrc_receipt_id": headers["Receipt-ID"],
+		"hmrc_receipt_timestamp": headers["Receipt-Timestamp"],
+		"hmrc_period_key": selected_obligation["periodKey"],
+		"hmrc_processing_date": response.get("processingDate"),
+		"hmrc_form_bundle_number": response.get("formBundleNumber"),
+		"hmrc_payment_indicator": response.get("paymentIndicator"),
+		"hmrc_charge_reference_number": response.get("chargeRefNumber"),
+		"hmrc_vrn": vat_api.get_vrn(doc.company),
+		"is_finalised": is_finalised
+	}
+
+	# Update submitted docs without triggering submit validations
+	doc.db_set(response_fields, commit=True)
